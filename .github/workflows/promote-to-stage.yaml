@@ -30,6 +30,12 @@ jobs:
           type=sha,format=short
           type=raw,value=latest
 
+    - name: Setup Trivy
+      uses: aquasecurity/setup-trivy@v0.2.0
+      with:
+        cache: true
+        version: v0.69.3
+
     - name: Run Trivy vulnerability scan
       uses: aquasecurity/trivy-action@0.33.1
       with:
@@ -39,7 +45,8 @@ jobs:
         exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
-        severity: 'CRITICAL'
+        severity: 'CRITICAL,HIGH'
+        skip-setup-trivy: true
 
     - name: Install crane
       run: |
