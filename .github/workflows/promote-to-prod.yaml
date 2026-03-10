@@ -31,7 +31,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.STAGE_REPO }}
+        images: ${{ env.PROD_REPO }}
         tags: |
           type=sha,format=short
           type=raw,value=latest
@@ -57,6 +57,7 @@ jobs:
       run: |
         digest="${{ github.event.inputs.sourceDigest }}"
         echo "${{ steps.meta.outputs.tags }}" | while read -r TAG; do
+          echo "Promoting to: $TAG"
           crane copy "${{ env.STAGE_REPO }}@$digest" "$TAG"
         done
 
@@ -68,7 +69,9 @@ jobs:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
       run: |
-        PROD_DIGEST=$(crane digest $(echo "${{ steps.meta.outputs.tags }}" | head -1))
+        SHA_TAG="sha-$(echo ${{ github.sha }} | cut -c1-7)"
+        PROD_DIGEST=$(crane digest ${{ env.PROD_REPO }}:${SHA_TAG})
+        echo "Signing ${{ env.PROD_REPO }}:${SHA_TAG}@${PROD_DIGEST}"
         cosign sign --yes \
           --key env://COSIGN_PRIVATE_KEY \
           "${{ env.PROD_REPO }}@${PROD_DIGEST}"
