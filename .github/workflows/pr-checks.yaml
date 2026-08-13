@@ -38,7 +38,7 @@ jobs:
           tags: ${{ env.ORG }}/${{ env.APP }}:pr-${{ github.sha }}
 
       - name: Setup Trivy
-        uses: aquasecurity/setup-trivy@v0.2.0
+        uses: aquasecurity/setup-trivy@v0.2.4
         with:
           cache: true
           version: v0.69.3
