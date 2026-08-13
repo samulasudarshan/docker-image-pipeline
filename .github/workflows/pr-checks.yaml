@@ -42,10 +42,10 @@ jobs:
         uses: aquasecurity/setup-trivy@v0.2.0
         with:
           cache: true
-          version: v0.69.3
+          version: v0.72.0
 
       - name: Vulnerability scan (Trivy)
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           scan-type: image
           image-ref: ${{ env.ORG }}/${{ env.APP }}:pr-${{ github.sha }}
@@ -57,7 +57,7 @@ jobs:
           skip-setup-trivy: true
 
       - name: Generate SBOM (Trivy)
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           scan-type: image
           image-ref: ${{ env.ORG }}/${{ env.APP }}:pr-${{ github.sha }}
