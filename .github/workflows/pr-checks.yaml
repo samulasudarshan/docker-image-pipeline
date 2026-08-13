@@ -44,8 +44,9 @@ jobs:
           cache: true
           version: v0.72.0
 
+      # FIX 1: Added 'v' prefix to the version tag
       - name: Vulnerability scan (Trivy)
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ${{ env.ORG }}/${{ env.APP }}:pr-${{ github.sha }}
@@ -56,8 +57,9 @@ jobs:
           severity: 'CRITICAL'
           skip-setup-trivy: true
 
+      # FIX 2: Added 'v' prefix to the version tag
       - name: Generate SBOM (Trivy)
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: ${{ env.ORG }}/${{ env.APP }}:pr-${{ github.sha }}
